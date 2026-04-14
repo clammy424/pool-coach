@@ -1,19 +1,17 @@
-from sqlmodel import Session, SQLModel, create_engine
-import config
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
-    host = os.getenv("DB_HOST")
-    port = os.getenv("DB_PORT")
-    db = os.getenv("DB_NAME")
+engine = create_engine(DATABASE_URL, echo=True)
 
-    DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{db}"
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
-engine = create_engine(DATABASE_URL)
-
-db = SQLModel.SessionLocal()
+Base = declarative_base()
