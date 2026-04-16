@@ -15,3 +15,7 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+def init_db():
+    from app.models import user  # import models HERE (important)
+    Base.metadata.create_all(bind=engine)
